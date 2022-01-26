@@ -1,4 +1,4 @@
-import { getTag } from '../src/service'
+import { getTag, forcePull } from '../src/service'
 import * as fs from 'fs/promises'
 
 describe('getTag function', () => {
@@ -62,6 +62,13 @@ describe('getTag function', () => {
     expect(tag).toBe(null)    
   })
 
+  it ('should not consider the tag to force pull', () => {
+    expect(forcePull("1.2.3")).toBe(false)
+  })
+
+  it ('should consider the tag to force pull', () => {
+    expect(forcePull("latest")).toBe(true)
+  })
 })
 
 const getJSONTestData = async (testName = "comprehensive") => {

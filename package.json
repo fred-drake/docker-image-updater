@@ -34,6 +34,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "^0.25.0",
+    "nodegit": "^0.27.0",
     "semver": "^7.3.5",
     "tslib": "~2.3.1",
     "winston": "^3.4.0"

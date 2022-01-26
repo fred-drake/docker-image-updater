@@ -14,8 +14,12 @@ export const getTag = async (repository: string, pattern: string,
     return getLatestQualifyingTag(pattern, tagList)
 }
 
-const getLatestQualifyingTag = (pattern: string, activeTags: string[]): string | undefined => {
-    logger.debug(`Total active tags: ${activeTags}`)
+export const forcePull = (tag: string) => {
+    return ! /^\d+\.\d+\.\d+$/.test(tag)
+}
+
+const getLatestQualifyingTag = (pattern: string, tags: string[]): string | undefined => {
+    logger.debug(`Total active tags: ${tags}`)
 
     const coercedPattern = coerceDockerPattern(pattern)
     if (coercedPattern == null) {
@@ -25,7 +29,7 @@ const getLatestQualifyingTag = (pattern: string, activeTags: string[]): string |
 
     logger.debug(`pattern coerced from ${pattern} to ${coercedPattern}`)
     let latestQualifyingTag = null
-    for(const tag of activeTags) {
+    for(const tag of tags) {
         // if tag matches exactly, return that straight away
         if (tag == pattern) {
             return tag
@@ -53,6 +57,8 @@ const getLatestQualifyingTag = (pattern: string, activeTags: string[]): string |
     return latestQualifyingTag
 }
 
+// Unlike semver, which considers "1" to be the same as "1.0.0", in Docker we consider it to be
+// the latest version with major version 1.
 const coerceDockerPattern = (pattern: string) => {
     const MAX_REV = "999999"
     if (/^\d+$/.test(pattern)) {
@@ -70,7 +76,7 @@ const coerceDockerPattern = (pattern: string) => {
     return null
 }
 
-
+// Pulls JSON data from an external module
 const pullTagsFromRepository = async (repository: string) => {
     const DIR = "/node-docker-registry-client"
     const pExec = promisify(exec)
