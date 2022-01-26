@@ -1,5 +1,4 @@
 FROM node:16.13.2
-
 WORKDIR /
 RUN git clone --depth=1 https://github.com/joyent/node-docker-registry-client.git && \
     cd /node-docker-registry-client && \
@@ -18,4 +17,4 @@ COPY ./src/ /work/src/
 RUN npm install
 RUN NODE_ENV=production npm run build
 
-# CMD [ "npm", "start" ]
+CMD [ "npm", "start" ]
